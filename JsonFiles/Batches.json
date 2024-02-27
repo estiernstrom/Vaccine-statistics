@@ -1,0 +1,163 @@
+{
+  "Meta": {
+    "TotalRecords": 26
+  },
+  "Batches": [
+    {
+      "BatchNumber": "AZ002",
+      "VaccineName": "Vaxzevria",
+      "Manufacturer": "AstraZeneca",
+      "TotalUses": 9465
+    },
+    {
+      "BatchNumber": "BBIBP001",
+      "VaccineName": "BBIBP-CorV",
+      "Manufacturer": "Sinopharm",
+      "TotalUses": 5320
+    },
+    {
+      "BatchNumber": "BBIBP002",
+      "VaccineName": "BBIBP-CorV",
+      "Manufacturer": "Sinopharm",
+      "TotalUses": 3453
+    },
+    {
+      "BatchNumber": "ER1741",
+      "VaccineName": "Comirnaty",
+      "Manufacturer": "Pfizer-BioNTech",
+      "TotalUses": 2591
+    },
+    {
+      "BatchNumber": "ER1749",
+      "VaccineName": "Comirnaty",
+      "Manufacturer": "Pfizer-BioNTech",
+      "TotalUses": 2531
+    },
+    {
+      "BatchNumber": "EW4109",
+      "VaccineName": "mRNA-1273",
+      "Manufacturer": "Moderna",
+      "TotalUses": 4125
+    },
+    {
+      "BatchNumber": "ET8885",
+      "VaccineName": "Janssen COVID-19 Vaccine",
+      "Manufacturer": "Johnson \u0026 Johnson",
+      "TotalUses": 3825
+    },
+    {
+      "BatchNumber": "EW3143",
+      "VaccineName": "Janssen COVID-19 Vaccine",
+      "Manufacturer": "Johnson \u0026 Johnson",
+      "TotalUses": 11818
+    },
+    {
+      "BatchNumber": "EL0739",
+      "VaccineName": "Vaxzevria",
+      "Manufacturer": "AstraZeneca",
+      "TotalUses": 8192
+    },
+    {
+      "BatchNumber": "FA1027",
+      "VaccineName": "Covovax",
+      "Manufacturer": "Novavax",
+      "TotalUses": 8176
+    },
+    {
+      "BatchNumber": "EM4965",
+      "VaccineName": "Covovax",
+      "Manufacturer": "Novavax",
+      "TotalUses": 5438
+    },
+    {
+      "BatchNumber": "EK1768",
+      "VaccineName": "Covovax",
+      "Manufacturer": "Novavax",
+      "TotalUses": 5581
+    },
+    {
+      "BatchNumber": "EE8492",
+      "VaccineName": "Covovax",
+      "Manufacturer": "Novavax",
+      "TotalUses": 4058
+    },
+    {
+      "BatchNumber": "RD8733",
+      "VaccineName": "Comirnaty",
+      "Manufacturer": "Pfizer-BioNTech",
+      "TotalUses": 15392
+    },
+    {
+      "BatchNumber": "FG8736",
+      "VaccineName": "Comirnaty",
+      "Manufacturer": "Pfizer-BioNTech",
+      "TotalUses": 15081
+    },
+    {
+      "BatchNumber": "PH7845",
+      "VaccineName": "Comirnaty",
+      "Manufacturer": "Pfizer-BioNTech",
+      "TotalUses": 9078
+    },
+    {
+      "BatchNumber": "NH234",
+      "VaccineName": "Comirnaty",
+      "Manufacturer": "Pfizer-BioNTech",
+      "TotalUses": 2517
+    },
+    {
+      "BatchNumber": "HJ73634",
+      "VaccineName": "Comirnaty",
+      "Manufacturer": "Pfizer-BioNTech",
+      "TotalUses": 4656
+    },
+    {
+      "BatchNumber": "AZ009",
+      "VaccineName": "Vaxzevria",
+      "Manufacturer": "AstraZeneca",
+      "TotalUses": 9723
+    },
+    {
+      "BatchNumber": "AZ011",
+      "VaccineName": "Vaxzevria",
+      "Manufacturer": "AstraZeneca",
+      "TotalUses": 965
+    },
+    {
+      "BatchNumber": "ERQ65148",
+      "VaccineName": "BBIBP-CorV",
+      "Manufacturer": "Sinopharm",
+      "TotalUses": 190
+    },
+    {
+      "BatchNumber": "EOR7415",
+      "VaccineName": "Covovax",
+      "Manufacturer": "Novavax",
+      "TotalUses": 568
+    },
+    {
+      "BatchNumber": "UTY6541",
+      "VaccineName": "mRNA-1273",
+      "Manufacturer": "Moderna",
+      "TotalUses": 3
+    },
+    {
+      "BatchNumber": "AZ011B",
+      "VaccineName": "Vaxzevria",
+      "Manufacturer": "AstraZeneca",
+      "TotalUses": 160
+    },
+    {
+      "BatchNumber": "EW1543",
+      "VaccineName": "mRNA-1273",
+      "Manufacturer": "Moderna",
+      "TotalUses": 215
+    },
+    {
+      "BatchNumber": "EW3149",
+      "VaccineName": "Janssen COVID-19 Vaccine",
+      "Manufacturer": "Johnson \u0026 Johnson",
+      "TotalUses": 100
+    }
+  ]
+}

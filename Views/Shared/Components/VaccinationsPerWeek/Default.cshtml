@@ -1,0 +1,281 @@
+﻿@using Newtonsoft.Json
+@model DSU24_Grupp5.Models.ViewModel.DisplayVaccinationsPerWeekViewModel
+
+<canvas id="line-chart"></canvas>
+
+<div class="chart-2-filter" style="display:none; justify-content: center;" id="chart-2-filter">
+   
+    <select id="desoSelect" class="dropdown-line-chart">
+        <option value="0"> Alla områden i Östersundskommun</option>
+        @foreach (var deso in Model.DesoNames)
+        {
+            <option value="@deso>">@deso</option>
+        }
+    </select>
+
+    <select class="dropdown-line-chart" id="yearSelect">
+        <option value="2024">2024</option>
+        <option value="2023">2023</option>
+        <option value="2022">2022</option>
+        <option value="2021">2021</option>
+        <option value="2020">2020</option>
+    </select>
+
+    <button class="buttons-filter-style" style="margin-top: 2px;" onclick="applyChanges()">Sök</button>
+
+</div>
+
+<canvas id="line-chart2" class="line-chart2" style="display: none;"></canvas>
+
+<script type="text/javascript">
+
+    const weekCtx = document.getElementById('line-chart');
+    const weekData2020 = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeek2020));
+    const weekData2021 = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeek2021));
+    const weekData2022 = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeek2022));
+    const weekData2023 = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeek2023));
+    const weekData2024 = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeek2024));   
+    
+    let desoWeekData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2024));
+
+    const desoWeekNames = @Html.Raw(JsonConvert.SerializeObject(Model.DesoNames));
+
+    const weekLabels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52];
+       
+    const Weekchart = new Chart(weekCtx, {
+        type: 'line',
+        data: {
+            labels: weekLabels,
+            datasets: [
+                {
+                    data: weekData2020,
+                    label: "2020",
+                    borderColor: "#F75590",
+                    fill: false
+                },
+                {
+                    data: weekData2021,
+                    label: "2021",
+                    borderColor: "#726953",
+                    fill: false
+                },
+                {
+                    data: weekData2022,
+                    label: "2022",
+                    borderColor: "#EE5622",
+                    fill: false
+                },
+                {
+                    data: weekData2023,
+                    label: "2023",
+                    borderColor: "#00BBF9",
+                    fill: false
+                },
+                {
+                    data: weekData2024,
+                    label: "2024",
+                    borderColor: "#2BA84A",
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Vaccinationer vecka för vecka'
+            }
+        }
+    });
+
+    function updateDesoValue() {
+        const desoSelect = document.getElementById('desoSelect');
+        const selectedDesoIndex = desoSelect.selectedIndex; // det valda områdets index för att kunna jämföra med motsvarade plats i andra listan
+        const selectedYear = document.getElementById('yearSelect').value;
+
+        if (selectedDesoIndex === 0) {
+            // Visar data för alla områden i Östersundskommun om detta är valt
+            refreshChart();
+            desoWeekData.forEach((dataList, index) => {
+                const dataset = {
+                    label: desoWeekNames[index],
+                    fill: false,
+                    data: dataList
+                };
+                weekchart2.data.datasets.push(dataset);
+            });
+        } else {
+            let desoData = {};
+
+            switch (selectedYear) {
+                case '2020':
+                    desoData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2020));
+                    break;
+                case '2021':
+                    desoData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2021));
+                    break;
+                case '2022':
+                    desoData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2022));
+                    break;
+                case '2023':
+                    desoData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2023));
+                    break;
+                case '2024':
+                    desoData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2024));
+                    break;
+                default:
+                    
+                    break;
+            }
+
+            // Hämtar data utifrån valet av område i listan
+            const selectedDesoData = desoData[selectedDesoIndex - 1]; // -1 för att "alla områden i östersund har  plats 0"
+            const selectedDesoName = desoWeekNames[selectedDesoIndex - 1];
+
+            const dataset = {
+                label: selectedDesoName,
+                fill: false,
+                data: selectedDesoData
+            };
+
+            refreshChart();
+            weekchart2.data.datasets = [dataset]; // Byter ut gammal data mot nya
+        }
+
+        weekchart2.update(); // Uppdaterar chart
+    }
+
+    function updateYearValues() {
+        const yearSelect = document.getElementById('yearSelect')
+        const selectedYear = yearSelect.value;
+        if (selectedYear === '2020') {
+            desoWeekData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2020));
+        }
+        else if (selectedYear === '2021') {
+            desoWeekData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2021));
+        }
+        else if (selectedYear === '2022') {
+            desoWeekData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2022));
+        }
+        else if (selectedYear === '2023') {
+            desoWeekData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2023));
+        }
+        else if (selectedYear === '2024') {
+            desoWeekData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2024));
+        }
+        refreshChart();
+        desoWeekData.forEach((dataList, index) => {
+            const dataset = {
+                label: desoWeekNames[index],             
+                fill: false,
+                data: dataList
+            };
+            weekchart2.data.datasets.push(dataset);
+        });
+        weekchart2.update();
+    }
+
+    function refreshChart() {
+        if (weekchart2) {
+            // tar bort nuvarande dataset
+            weekchart2.data.datasets = [];
+        } else {
+            // skapar  ny dataset om det inte redan finns
+            weekchart2 = new Chart(week2ctx, {
+                type: 'line',
+                data: {
+                    labels: weekLabels
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Vaccinationer vecka för vecka'
+                    }
+                }
+            });
+        }
+        // gör en ny dataset för valt år
+        const dataset = {
+
+        };
+}
+
+   //börjar skapa chart2
+    const week2ctx = document.getElementById('line-chart2')
+    const weekchart2 = new Chart(week2ctx, {
+
+        type: 'line',
+        data: {
+            labels: weekLabels,
+            datasets: []
+
+        }
+        ,
+        options: {
+            title: {
+                display: true,
+                text: 'Vaccinationer vecka för vecka'
+            }
+        }
+    });
+
+    //loop som uppdaterar diagramet korrekt, utan denna ser det ut som en skräckfilm
+    desoWeekData.forEach((dataList, index) => {
+        const dataset = {
+            label: desoWeekNames[index],         
+            fill: false,
+            data: dataList
+        };
+
+        weekchart2.data.datasets.push(dataset);
+    });
+    weekchart2.update();
+
+    function applyChanges() {
+        const selectedDesoIndex = document.getElementById('desoSelect').selectedIndex;
+        const selectedYear = document.getElementById('yearSelect').value;
+
+        if (selectedDesoIndex === 0) {
+            // Alla områden i östersund valet uppdateras
+            updateYearValues();
+        } else {
+            // uppdaterar data beroende på år och område
+            
+            let desoData = {};
+
+            switch (selectedYear) {
+                case '2020':
+                    desoData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2020));
+                    break;
+                case '2021':
+                    desoData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2021));
+                    break;
+                case '2022':
+                    desoData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2022));
+                    break;
+                case '2023':
+                    desoData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2023));
+                    break;
+                case '2024':
+                    desoData = @Html.Raw(JsonConvert.SerializeObject(Model.vaccinationsPerWeekDeso2024));
+                    break;
+                default:
+                   
+                    break;
+            }
+
+            const selectedDesoData = desoData[selectedDesoIndex - 1];
+            const selectedDesoName = desoWeekNames[selectedDesoIndex - 1];
+
+            const dataset = {
+                label: selectedDesoName,
+                fill: false,
+                data: selectedDesoData
+            };
+
+            refreshChart();
+            weekchart2.data.datasets = [dataset];
+            weekchart2.update(); // Uppdaterar chart
+        }
+    }
+</script>
+

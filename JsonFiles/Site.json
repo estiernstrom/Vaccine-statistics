@@ -1,0 +1,47 @@
+[
+  {
+    "Id": 2,
+    "Name": "Östersunds Sjukhus",
+    "StreetAddress": "Kyrkgatan 16",
+    "PostalNumber": "831 31",
+    "City": "Östersund",
+    "Latitude": 63.18265958400823,
+    "Longitude": 14.637116357223917
+  },
+  {
+    "Id": 3,
+    "Name": "Campus Östersund",
+    "StreetAddress": "Campus Forskarensväg 3 Hus Ua",
+    "PostalNumber": "83140",
+    "City": "Östersund",
+    "Latitude": 63.176992,
+    "Longitude": 14.652340
+  },
+  {
+    "Id": 4,
+    "Name": "Torvalla Hälsocentral",
+    "StreetAddress": "Nävervägen 17",
+    "PostalNumber": "83172",
+    "City": "Östersund",
+    "Latitude": 63.15773496573801,
+    "Longitude": 14.74364848934634
+  },
+  {
+    "Id": 5,
+    "Name": "Frösö hälsocentral",
+    "StreetAddress": "Önevägen 8",
+    "PostalNumber": "832 51",
+    "City": "Frösön",
+    "Latitude": 63.16820459805309,
+    "Longitude": 14.603089494934265
+  },
+  {
+    "Id": 6,
+    "Name": "Zätagränds hälsocentral",
+    "StreetAddress": "Zätagränd 1",
+    "PostalNumber": "83130",
+    "City": "Östersund",
+    "Latitude": 63.17768010450178,
+    "Longitude": 14.63598717664447
+  }
+]

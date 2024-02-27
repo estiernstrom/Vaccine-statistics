@@ -1,0 +1,26 @@
+﻿﻿@{
+    ViewData["Title"] = "Jämför";
+}
+@model DSU24_Grupp5.Models.ViewModel.IndexFilterViewModel
+
+<div class="top-container">
+    <button class="btnOpenFilterMenu" onclick="openFilterMenu()"> <img src="/lib/Img/filter.png" /> Filter</button>
+    <div class="popup-menu">
+        @await Component.InvokeAsync("Filter", Model)
+    </div>
+</div>
+
+<section class="compare-section">
+    <div class="compare-container">
+          @await Component.InvokeAsync("CompareDesosDeso1", Model)
+          @await Component.InvokeAsync("CompareDesosDeso2", Model)
+    </div>
+</section>
+
+<script type="text/javascript">
+    function openFilterMenu() {
+        document.getElementById("filter-popup").style.display = "block";
+    }
+
+</script>
+

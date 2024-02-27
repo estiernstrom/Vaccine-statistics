@@ -1,0 +1,94 @@
+﻿@model DSU24_Grupp5.Models.ViewModel.DisplayVaccinationsGenderViewModel
+
+
+
+
+<canvas id="menDoughnutChart"></canvas>
+<canvas id="womenDoughnutChart"></canvas>
+<canvas id="nonBinaryDoughnutChart"></canvas>
+
+ <script type="text/javascript">
+ new Chart(menDoughnutChart, {
+    type: 'doughnut',
+    data: {
+        labels: [
+                'Antal ovaccinerade män',
+                'Antal vaccinerade män'
+        ],
+        datasets: [{
+            label: 'Män',
+                data: [@Model.PopulationNotVaccinatedByGender[0], @Model.PopulationVaccinatedByGender[0]],
+            backgroundColor: [
+                    'rgb(191, 17, 17)',
+                    'rgb(12, 138, 46)'
+                    
+            ],
+            hoverOffset: 4
+        }]
+    },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black'
+                    }
+                }
+            },
+            color: 'black'
+        }
+});
+new Chart(womenDoughnutChart, {
+    type: 'doughnut',
+    data: {
+        labels: [
+                'Antal ovaccinerade kvinnor',
+                'Antal vaccinerade kvinnor'
+        ],
+        datasets: [{
+            label: 'Kvinnor',
+                data: [@Model.PopulationNotVaccinatedByGender[1], @Model.PopulationVaccinatedByGender[1]],
+            backgroundColor: [                    
+                    'rgb(191, 17, 17)',
+                    'rgb(12, 138, 46)'
+            ],
+            hoverOffset: 4
+        }]
+    },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black'
+                    }
+                }
+            },
+            color: 'black'
+        }
+});
+    new Chart(nonBinaryDoughnutChart, {
+        type: 'doughnut',
+        data: {
+            labels: [
+                'Antal vaccinerade icke-binära'
+            ],
+            datasets: [{
+                label: 'Icke-binära',
+                data: [@Model.PopulationVaccinatedByGender[2]],
+                backgroundColor: [
+                    'rgb(12, 138, 46)',
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black'
+                    }
+                }
+            },
+            color: 'black'
+        }
+    });
+</script>

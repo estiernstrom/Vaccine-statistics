@@ -1,0 +1,235 @@
+﻿@model DSU24_Grupp5.Models.ViewModel.DisplayCompareDesosArea1ViewModel
+@using System.Text.Json
+@* @using Newtonsoft.Json *@
+
+<div class="compare-deso-area-left">
+    <h1 class="deso-name">@Model.DesoName[0]</h1>
+    <section class="compare-statistic-box-section">
+        <div class="compare-statistic-box-div">
+            <h5>Totalt antal vaccinerade</h5>
+            <div class="compare-statistic-box-small">
+                <h1>@Model.RecordPatients St</h1>
+            </div>
+        </div>
+        <div class="compare-statistic-box-div">
+            <h5>Totalt andel vaccinerade i procent %</h5>
+            <div class="compare-statistic-box-small">
+            <h1>@Model.VaccinationsInPercentage%</h1>
+            </div>
+        </div>
+    </section>
+
+    <section class="compare-statistic-box-section">
+        <div class="compare-statistic-box-div">
+            <h5>Antal vaccinerade fördelat efter ålder</h5>
+            <div class="statistic-box compare-statistic-box-left">
+                <canvas id="pieChart1"> </canvas>
+            </div>
+        </div>
+        <div class="compare-statistic-box-div">
+            <h5>Antal vaccinerade samt befolkningsmängd</h5>
+            <div class="statistic-box compare-statistic-box-right">
+                <canvas id="barChart1">
+                </canvas>
+            </div>
+        </div>
+    </section>
+    <section class="compare-statistic-box-section">
+        <div class="compare-statistic-box-div">
+            <h5>Antal vaccinerade män och kvinnor</h5>
+            <div class="compare-statistic-box compare-statistic-box-bottom">
+                <canvas id="menDoughnutChart1"> </canvas>
+                <canvas id="womenDoughnutChart1"> </canvas>
+                <canvas id="nonBinaryDoughnutChart1"> </canvas>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script type="text/javascript">
+
+    const pieCtx = document.getElementById('pieChart1');
+    const pieData = @Html.Raw(JsonSerializer.Serialize(Model.SortedAges));
+    let barLabels1 = @Html.Raw(JsonSerializer.Serialize(Model.DesoName));
+    let barData1 = @Html.Raw(JsonSerializer.Serialize(Model.RecordPatients));
+    let barDataPopulation1 = @Html.Raw(JsonSerializer.Serialize(Model.Population));
+    const barCtx1 = document.getElementById('barChart1');
+
+
+    new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: [
+                '15-24', '25-34', '35-44', '45-54', '55-64', '65-74', '75+'
+            ],
+            datasets: [{
+                label: 'Vaccinerade per åldersgrupp',
+                data: pieData,
+                backgroundColor: [
+                    'rgb(255, 99, 132)', 'rgb(255, 205, 86)', 'rgb(54, 162, 235)', 'rgb(75, 192, 192)', 'rgb(153, 102, 255)',
+                    'rgb(255, 159, 64)', 'rgb(255, 0, 0)', 'rgb(0, 255, 0)', 'rgb(0, 0, 255)', 'rgb(128, 0, 128)', 'rgb(0, 128, 0)',
+                    'rgb(128, 128, 128)', 'rgb(158, 157, 150)'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black'
+                    }
+                }
+            },
+            color: 'black'
+        }
+    });
+    let barChart1 = new Chart(barCtx1, {
+        type: 'bar',
+        data: {
+            labels: barLabels1,
+            datasets: [{
+                label: 'Antal vaccinerade',
+                data: [barData1],
+                backgroundColor: [
+                    'rgba(104, 33, 158)'
+                ],
+                borderColor: [
+                    'rgb(0, 0, 0)'
+                ],
+                hoverBackgroundColor: [
+                    'rgb(0, 0, 0)'
+                ],
+                borderWidth: 3
+            },
+            {
+                label: 'Befolkningsmängd',
+                data: [barDataPopulation1],
+                backgroundColor: [
+                    'rgba(204, 204, 255)'
+                ],
+                borderColor: [
+                    'rgb(0, 0, 0)'
+                ],
+                hoverBackgroundColor: [
+                    'rgb(0, 0, 0)'
+                ],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: true,
+                        color: "#000000"
+                    },
+                    ticks: {
+                        color: 'black'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: true,
+                        color: "#000000"
+                    },
+                    ticks: {
+                        color: 'black'
+                    }
+                }
+            },
+        }
+    });
+
+    new Chart(menDoughnutChart1, {
+        type: 'doughnut',
+        data: {
+            labels: [
+                'Antal ovaccinerade män',
+                'Antal vaccinerade män'
+            ],
+            datasets: [{
+                label: 'Män',
+                data: [@Model.PopulationNotVaccinatedByGender[0], @Model.PopulationVaccinatedByGender[0]],
+                backgroundColor: [
+                    'rgb(191, 17, 17)',
+                    'rgb(12, 138, 46)'
+
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black'
+                    }
+                }
+            },
+            color: 'black'
+        }
+    });
+    new Chart(womenDoughnutChart1, {
+        type: 'doughnut',
+        data: {
+            labels: [
+                'Antal ovaccinerade kvinnor',
+                'Antal vaccinerade kvinnor'
+            ],
+            datasets: [{
+                label: 'Kvinnor',
+                data: [@Model.PopulationNotVaccinatedByGender[1], @Model.PopulationVaccinatedByGender[1]],
+                backgroundColor: [
+                    'rgb(191, 17, 17)',
+                    'rgb(12, 138, 46)'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black'
+                    }
+                }
+            },
+            color: 'black'
+        }
+    });
+    new Chart(nonBinaryDoughnutChart1, {
+        type: 'doughnut',
+        data: {
+            labels: [
+                'Antal vaccinerade icke-binära'
+            ],
+            datasets: [{
+                label: 'Icke-binära',
+                data: [@Model.PopulationVaccinatedByGender[2]],
+                backgroundColor: [
+                    'rgb(12, 138, 46)',
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black'
+                    }
+                }
+            },
+            color: 'black'
+        }
+    });
+</script>

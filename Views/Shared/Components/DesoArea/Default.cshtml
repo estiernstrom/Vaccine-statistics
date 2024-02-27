@@ -1,0 +1,78 @@
+﻿@model DSU24_Grupp5.Models.ViewModel.DisplayDesoAreaViewModel
+@using System.Text.Json
+
+<canvas id="myChart"></canvas>
+
+<script type="text/javascript">
+
+    const barCtx = document.getElementById('myChart');
+    let labels = @Html.Raw(JsonSerializer.Serialize(Model.SelectedDesoNames));
+    let barData = @Html.Raw(JsonSerializer.Serialize(Model.SelectedDesoRecordsPatiens));
+    let barDataPopulation = @Html.Raw(JsonSerializer.Serialize(Model.SelectedDesoPopulation));
+
+    let myChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Antal vaccinerade',
+                data: barData,
+                backgroundColor: [
+                    'rgba(104, 33, 158)'
+                ],
+                borderColor: [
+                    'rgb(0, 0, 0)'
+                ],
+                hoverBackgroundColor: [
+                    'rgb(0, 0, 0)'
+                ],
+                borderWidth: 3
+            },
+            {
+                label: 'Befolkningsmängd',
+                data: barDataPopulation,
+                backgroundColor: [
+                    'rgba(204, 204, 255)'
+                ],
+                borderColor: [
+                    'rgb(0, 0, 0)'
+                ],
+                hoverBackgroundColor: [
+                    'rgb(0, 0, 0)'
+                ],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: true,
+                        color: "#000000"
+                    },
+                    ticks: {
+                        color: 'black'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: true,
+                        color: "#000000"
+                    },
+                    ticks: {
+                        color: 'black'
+                    }
+                }
+            },
+        }
+    });
+
+</script>

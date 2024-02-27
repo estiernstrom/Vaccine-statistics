@@ -1,0 +1,40 @@
+﻿@using Newtonsoft.Json
+@model DSU24_Grupp5.Models.ViewModel.DisplayAgeViewModel
+
+<canvas id="pieChart"></canvas>
+
+<script type="text/javascript">
+    const pieCtx = document.getElementById('pieChart');
+    const pieData = @Html.Raw(JsonConvert.SerializeObject(Model.SortedAges));
+
+
+    new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: [
+                '15-24', '25-34', '35-44', '45-54', '55-64', '65-74', '75+'
+            ],
+            datasets: [{
+                label: 'Vaccinerade per åldersgrupp',
+                data: pieData,
+                backgroundColor: [
+                    'rgb(255, 99, 132)', 'rgb(255, 205, 86)', 'rgb(54, 162, 235)', 'rgb(75, 192, 192)', 'rgb(153, 102, 255)',
+                    'rgb(255, 159, 64)', 'rgb(255, 0, 0)', 'rgb(0, 255, 0)', 'rgb(0, 0, 255)', 'rgb(128, 0, 128)', 'rgb(0, 128, 0)',
+                    'rgb(128, 128, 128)', 'rgb(158, 157, 150)'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'black'
+                    }
+                }
+            },
+            color: 'black'
+        }
+    });
+
+</script>

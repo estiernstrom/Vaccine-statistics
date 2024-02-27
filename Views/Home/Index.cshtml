@@ -1,0 +1,92 @@
+﻿﻿@{
+    ViewData["Title"] = "Startsida";
+}
+@model DSU24_Grupp5.Models.ViewModel.IndexFilterViewModel
+
+<div class="top-container">
+    <button class="btnOpenFilterMenu" onclick="openFilterMenu()"> <img src="/lib/Img/filter.png" /> Filter</button>
+    <div class="popup-menu">
+        @await Component.InvokeAsync("Filter", Model)
+    </div>
+</div>
+
+<section class="statistic-box-section">
+    <div class="statistic-box-div">
+        <h5>Totalt antal vaccinerade</h5>
+        <div class="statistic-box-small">
+            @await Component.InvokeAsync("VaccinationCount", Model) <h1>&nbsp;St</h1>
+        </div>
+    </div>
+    <div class="statistic-box-div">
+    <h5>Totalt andel vaccinerade i procent %</h5>
+    <div class="statistic-box-small">
+            @await Component.InvokeAsync("VaccinationsInPercentage", Model) <h1>%</h1>
+    </div>
+    </div>
+</section>
+
+<section class="statistic-box-section">
+    <div class="statistic-box-div">
+        <h5>Antal vaccinerade fördelat efter ålder</h5>
+        <div class="statistic-box statistic-box-left">
+            @await Component.InvokeAsync("PieChartAge", Model)
+            <canvas id="pieChart"> </canvas>
+        </div>
+    </div>
+    <div class="statistic-box-div">
+        <h5>Antal vaccinerade män och kvinnor</h5>
+        <div class="statistic-box statistic-box-right">
+            @await Component.InvokeAsync("VaccinationGender", Model)
+        </div>
+    </div>
+</section>
+
+<div class="area-bar-chart-box">
+    <div class="statistic-box-div">
+        <h5>Antal vaccinerade per område</h5>
+        <div class="bottom-content-box">
+            @await Component.InvokeAsync("DesoArea", Model)
+        </div>
+    </div>
+</div>
+
+<div class="vaccination-per-week-buttons">
+    <button class="buttons-line-chart" onclick="showLineChart()">
+        Visa diagram för hela östersunds kommun.
+    </button>
+
+    <button class="buttons-line-chart" onclick="showLineChartTwo()">
+        Visa diagram för utvalda deson.
+    </button>
+</div>
+<div class="vaccination-per-week-box">
+    <div class="vaccination-per-week">
+        @await Component.InvokeAsync("VaccinationsPerWeek")
+    </div>
+
+</div>
+    
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        chart();
+        pie();
+        women();
+        men();
+    });
+    function openFilterMenu() {
+        document.getElementById("filter-popup").style.display = "block";
+    }
+    function showLineChart() {
+        document.getElementById("line-chart2").style.display = "none";
+        document.getElementById("chart-2-filter").style.display = "none";
+        document.getElementById("line-chart").style.display = "block"; 
+    }
+    function showLineChartTwo() {
+        document.getElementById("line-chart").style.display = "none";
+        document.getElementById("line-chart2").style.display = "block";
+        document.getElementById("chart-2-filter").style.display = "flex";
+    }
+</script>
+
+

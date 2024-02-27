@@ -1,0 +1,410 @@
+﻿@model DSU24_Grupp5.Models.ViewModel.DisplayFilterViewModel
+@using System.Text.Json
+
+@{
+    string currentView = @ViewContext.RouteData.Values["action"].ToString();
+}
+<form asp-action='@currentView' asp-controller="Home" method="post" class="filter-popup" id="filter-popup">
+ 
+    <div class="dropdowns">
+        <div class="filter-section-one">
+
+            <div class="filter-manufacturer">
+                <small>Välj tillverkare</small>
+                <div>
+                    <select id="dropDownManufacturer" name="Manufacturer" class="dropdown" onchange="changeVaccineByManufacturer(), clearBatchDropDown(), disableBachDropDown()">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-vaccine-name">
+                <small>Välj vaccin</small>
+                <div>
+                    <select id="dropDownVaccineName" name="VaccineName" class="dropdown" onchange="changeBatchesByVaccineName(), changeFilterManufacturerDropDown()">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+        
+
+            <div class="filter-batch">
+                <small>Välj batchnummer</small>
+                <div>
+                    <select id="dropDownBatch" name="BatchNumber" class="dropdown" disabled="">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-section-two">
+            @if (@currentView == "Index")
+            {
+                <div class="filter-deeso-area">
+                    <small>Välj deso områden</small>
+                    <div class="dropdown">
+                        <select id="dropDownDesoArea" name="DesoCodes" multiple multiselect-search="true" multiselect-select-all="true"
+                                multiselect-max-items="1" title="select">
+                            <option Selected value="C" style="font-weight:bold">Centralort</option>
+                            <option value="B" style="font-weight:bold">Tätort utanför centralort</option>
+                            <option value="A" style="font-weight:bold">Glesbygd</option>
+                        </select>
+                    </div>
+                </div>
+            }
+
+
+            <div class="filter-vaccinationstation">
+                <small>Välj vaccinationscentral</small>
+                <div>
+                    <select id="dropDownVaccStation" name="VaccinationStation" class="dropdown">
+                        <option value=""></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-dose">
+                <small>Välj minst antal tagna doser</small>
+                <div>
+                    <select id="dropDownDoseNumber" name="DoseNumber" class="dropdown">                        
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="filter-section-three">
+                <div class="filter-age">
+                <small>Välj åldersintervall</small>
+                    <div>
+                        <select id="dropDownAge" name="AgeInterval" class="dropdown">
+                        <option value="15,16,17,18,19,20,21,22,23,24,
+                                       25,26,27,28,29,30,31,32,33,34,
+                                       35,36,37,38,39,40,41,42,43,44,
+                                       45,46,47,48,49,50,51,52,53,54,
+                                       55,56,57,58,59,60,61,62,63,64,
+                                       65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80"></option>
+                            <option value="15,16,17,18,19,20,21,22,23,24">15-24</option>
+                            <option value="25,26,27,28,29,30,31,32,33,34">25-34</option>
+                            <option value="35,36,37,38,39,40,41,42,43,44">35-44</option>
+                            <option value="45,46,47,48,49,50,51,52,53,54">45-54</option>
+                            <option value="55,56,57,58,59,60,61,62,63,64">55-64</option>
+                            <option value="65,66,67,68,69,70,71,72,73,74">65-74</option>
+                            <option value="75,76,77,78,79,80">75+</option>
+                        </select>
+                    </div>
+                </div>
+
+            <div class="filter-gender">
+                <small>Välj kön</small>
+                <div>
+                    <select id="dropDownGender" name="Gender" class="dropdown">
+                        <option value=""></option>
+                        <option value="Male">Man</option>
+                        <option value="Female">Kvinna</option>
+                        <option value="Other">Icke-binär</option>
+                    </select>
+                </div>
+            </div>
+
+            
+            @if (currentView == "Index")
+            {
+                <div class="buttons-filter">
+                    <button class="buttons-filter-style" onclick="closeFilterMenu()" type="submit">Filtrera</button>
+                    <button class="buttons-filter-style" onclick="closeFilterMenu()" type="button">Stäng</button>
+                </div>
+            }
+        </div>
+        @if (currentView == "Compare")
+        {
+                <h5 id="choose-area">Välj områden att jämföra</h5>
+            <div class="filter-section-four">
+
+                <div class="filter-gender">
+                    <small>Område 1</small>
+
+                    <div>
+                        <select id="dropDownDesoArea1" name="DesoCode1" class="dropdown"
+                                title="select">
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-gender">
+                    <small>Område 2</small>
+
+                    <div>
+                        <select id="dropDownDesoArea2" name="DesoCode2" class="dropdown"
+                                title="select">
+                        </select>
+                    </div>
+                </div>
+                <div class="buttons-filter">
+                    <button class="buttons-filter-style" onclick="closeFilterMenu()" type="submit">Filtrera</button>
+                    <button class="buttons-filter-style" onclick="closeFilterMenu()" type="button">Stäng</button>
+                </div>
+
+            
+            </div>
+        }
+    </div>
+  
+</form>
+
+
+<script type="text/javascript">
+
+    function updateSelectedValues() {
+        let manufacturer = @Html.Raw(JsonSerializer.Serialize(Model.SelectedManufacturer));
+        let vaccineName = @Html.Raw(JsonSerializer.Serialize(Model.SelectedVaccineName));
+        let batch = @Html.Raw(JsonSerializer.Serialize(Model.SelectedBatchNumber));
+        let desoAreas = @Html.Raw(JsonSerializer.Serialize(Model.SelectedListOfDesoAreas));
+        let vaccStation = @Html.Raw(JsonSerializer.Serialize(Model.SelectedVaccStation));
+        let dose = @Html.Raw(JsonSerializer.Serialize(Model.SelectedDose));
+        let age = @Html.Raw(JsonSerializer.Serialize(Model.SelectedAge));
+        let compareArea1 = @Html.Raw(JsonSerializer.Serialize(Model.CompareDesoArea1));
+        let compareArea2 = @Html.Raw(JsonSerializer.Serialize(Model.CompareDesoArea2));
+
+        let gender = @Html.Raw(JsonSerializer.Serialize(Model.SelectedGender));
+        if (manufacturer !== null) {
+            document.getElementById("dropDownManufacturer").value = manufacturer;
+        };
+        if (vaccineName !== null) {
+            document.getElementById("dropDownVaccineName").value = vaccineName;
+        };
+        if (batch !== null) {
+            document.getElementById("dropDownBatch").value = batch;
+        };
+        if (desoAreas !== null && "@currentView" === "Index") {
+            document.getElementById("dropDownDesoArea").value = desoAreas[0];
+        };
+        if (vaccStation !== null) {
+            document.getElementById("dropDownVaccStation").value = vaccStation;
+        };
+        if (dose !== null) {
+            document.getElementById("dropDownDoseNumber").value = dose;
+        };       
+        if (gender !== null) {
+            document.getElementById("dropDownGender").value = gender;
+        };
+      
+        if (compareArea1 !== null && "@currentView" === "Compare") {
+            document.getElementById("dropDownDesoArea1").value = compareArea1;
+        }
+        if (compareArea2 !== null && "@currentView" === "Compare") {
+            document.getElementById("dropDownDesoArea2").value = compareArea2;
+        }
+
+        if (age.length > 29) {
+            document.getElementById("dropDownAge").selectedIndex = 0;
+        };
+
+        if (age[0] === '1' && age.length < 30) {
+            document.getElementById("dropDownAge").selectedIndex = 1;
+        };
+        if (age[0] === '2') {
+            document.getElementById("dropDownAge").selectedIndex = 2;
+        };
+        if (age[0] === '3') {
+            document.getElementById("dropDownAge").selectedIndex = 3;
+        };
+        if (age[0] === '4') {
+            document.getElementById("dropDownAge").selectedIndex = 4;
+        };
+        if (age[0] === '5') {
+            document.getElementById("dropDownAge").selectedIndex = 5;
+        };
+        if (age[0] === '6') {
+            document.getElementById("dropDownAge").selectedIndex = 6;
+        };
+        if (age[0] === '7') {
+            document.getElementById("dropDownAge").selectedIndex = 7;
+        };
+    };
+
+    function closeFilterMenu() {
+        document.getElementById("filter-popup").style.display = "none";
+    };
+
+    function displayDoses() {
+        var selectElement = document.getElementById('dropDownDoseNumber');
+
+        var mostAmountOfDoses = @Model.MostAmountOfDoses;
+
+        for (var i = 1; i <= mostAmountOfDoses; i++) {
+            var optionElement = document.createElement('option');
+            optionElement.value = i;
+            optionElement.textContent = i;
+            selectElement.appendChild(optionElement);
+        }
+
+    };
+
+    function displayBatchNumbersByVaccineName(batchNumbers) {
+
+        var selectElement = document.getElementById('dropDownBatch');
+        var listOfBatchNumbers = batchNumbers;
+
+        clearBatchDropDown();
+
+        for (var i = 0; i < listOfBatchNumbers.length; i++) {
+            var optionElement = document.createElement('option');
+
+            optionElement.value = listOfBatchNumbers[i];
+            optionElement.textContent = listOfBatchNumbers[i];
+            selectElement.appendChild(optionElement);
+        }
+    };
+
+    function displayVaccineByManufacturer(vaccineNames) {
+
+        var selectElement = document.getElementById('dropDownVaccineName');
+        var listOfVaccineNames = vaccineNames;
+
+
+        clearVaccineNameDropDown();
+
+        for (var i = 0; i < listOfVaccineNames.length; i++) {
+            var optionElement = document.createElement('option');
+
+            optionElement.value = listOfVaccineNames[i];
+            optionElement.textContent = listOfVaccineNames[i];
+            selectElement.appendChild(optionElement);
+        }
+    };
+
+    function getVaccineNames() {
+        var selectElement = document.getElementById('dropDownVaccineName');
+        var listOfVaccineNames = @Html.Raw(JsonSerializer.Serialize(Model.ListOfVaccineNames));
+
+        for (var i = 0; i < listOfVaccineNames.length; i++) {
+            var optionElement = document.createElement('option');
+            optionElement.value = listOfVaccineNames[i];
+            optionElement.textContent = listOfVaccineNames[i];
+            selectElement.appendChild(optionElement);
+        }
+    };
+
+    function populateDesoAreas(dropdownId) {
+        var selectElement = document.getElementById(dropdownId);
+        var listOfDesoAreas = @Html.Raw(JsonSerializer.Serialize(Model.DesoDto.Areas));
+        for (var i = 0; i < listOfDesoAreas.length; i++) {
+            var optionElement = document.createElement('option');
+            optionElement.value = listOfDesoAreas[i].Deso;
+            optionElement.textContent = listOfDesoAreas[i].DesoName;
+            selectElement.appendChild(optionElement);
+        }
+    };
+    
+    
+
+    function getVaccinationCentrals() {
+        var selectElement = document.getElementById('dropDownVaccStation');
+        var listOfVaccStations = @Html.Raw(JsonSerializer.Serialize(Model.ListOfVaccStations));
+        for (var i = 0; i < listOfVaccStations.length; i++) {
+            var optionElement = document.createElement('option');
+            optionElement.value = listOfVaccStations[i];
+            optionElement.textContent = listOfVaccStations[i];
+            selectElement.appendChild(optionElement);
+        }
+    };
+
+    function getManufacturers() {
+        var selectElement = document.getElementById('dropDownManufacturer');
+        var listOfManufacturers = @Html.Raw(JsonSerializer.Serialize(Model.ListOfManufacturers));
+
+        for (var i = 0; i < listOfManufacturers.length; i++) {
+            var optionElement = document.createElement('option');
+            optionElement.value = listOfManufacturers[i];
+            optionElement.textContent = listOfManufacturers[i];
+            selectElement.appendChild(optionElement);
+        }
+    };
+
+    function changeVaccineByManufacturer() {
+        const dropDownManufacturer = document.getElementById('dropDownManufacturer');
+        const selectedManufacturer = dropDownManufacturer.value;
+
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetVaccineNameByManufacturer")",
+            dataType: "json",
+            data: { selectedManufacturer },
+            success: function (data) {
+                displayVaccineByManufacturer(data)
+            },
+            error: function (req, status, error) {
+
+            },
+        })        
+    };
+
+    function changeBatchesByVaccineName() {
+        const dropDownVaccineName = document.getElementById('dropDownVaccineName');
+        const selectedVaccineName = dropDownVaccineName.value;
+
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetBachNumberByVaccineName")",
+            dataType: "json",
+            data: { selectedVaccineName },
+            success: function (data) {
+                displayBatchNumbersByVaccineName(data)
+            },
+            error: function (req, status, error) {
+
+            },
+        })
+        enableBachDropDown();
+    };
+
+    function enableBachDropDown() {
+        const dropDownVaccineName = document.getElementById('dropDownVaccineName');
+        const selectedVaccineName = dropDownVaccineName.value;
+
+        if (selectedVaccineName != null && selectedVaccineName != 'Välj vaccin') {
+            document.getElementById('dropDownBatch').disabled = false;
+        } else {
+            document.getElementById('dropDownBatch').disabled = true;
+        }
+
+    };
+
+    function disableBachDropDown() {
+
+        document.getElementById('dropDownBatch').disabled = true;
+
+    };
+
+    function clearBatchDropDown() {
+        document.getElementById("dropDownBatch").options.length = 1;
+    };
+
+    function clearVaccineNameDropDown() {
+        document.getElementById("dropDownVaccineName").options.length = 1;
+    };
+
+    if ("@currentView" === "Index") {
+        populateDesoAreas('dropDownDesoArea');
+    }
+    if ("@currentView" === "Compare") {
+        populateDesoAreas('dropDownDesoArea1');
+        populateDesoAreas('dropDownDesoArea2');
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        updateSelectedValues();
+    });
+
+    getManufacturers();
+    getVaccinationCentrals();
+    getVaccineNames();
+    displayDoses();
+    
+    var style = document.createElement('style');
+    style.setAttribute("id", "multiselect_dropdown_styles");
+   
+</script>

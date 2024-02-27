@@ -1,0 +1,70 @@
+{
+  "query": [
+    {
+      "code": "Region",
+      "selection": {
+        "filter": "vs:RegionKommun07",
+        "values": [
+          "2380"
+        ]
+      }
+    },
+    {
+      "code": "Alder",
+      "selection": {
+        "filter": "agg:Ålder5år",
+        "values": [
+          "15-19",
+          "20-24",
+          "25-29",
+          "30-34",
+          "35-39",
+          "40-44",
+          "45-49",
+          "50-54",
+          "55-59",
+          "60-64",
+          "65-69",
+          "70-74",
+          "75-79",
+          "80-84",
+          "85-89",
+          "90-94",
+          "95-99",
+          "100+"
+        ]
+      }
+    },
+    {
+      "code": "Kon",
+      "selection": {
+        "filter": "item",
+        "values": [
+          "1",
+          "2"
+        ]
+      }
+    },
+    {
+      "code": "ContentsCode",
+      "selection": {
+        "filter": "item",
+        "values": [
+          "BE0101N1"
+        ]
+      }
+    },
+    {
+      "code": "Tid",
+      "selection": {
+        "filter": "item",
+        "values": [
+          "2022"
+        ]
+      }
+    }
+  ],
+  "response": {
+    "format": "json"
+  }
+}
